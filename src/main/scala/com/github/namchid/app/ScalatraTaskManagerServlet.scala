@@ -3,9 +3,29 @@ package com.github.namchid.app
 import org.scalatra._
 import scala.xml.{ Text, Node }
 import scalate.ScalateSupport
-import Page.set
+import scala.slick.driver.MySQLDriver.simple._
 
-class ScalatraTaskManagerServlet extends ScalatraTaskManagerWebAppStack with FlashMapSupport with ScalateSupport {
+import Page.set
+import Tables._
+
+class ScalatraTaskManagerServlet(db: Database) extends ScalatraTaskManagerWebAppStack with FlashMapSupport with ScalateSupport {
+
+  def checkUsername(username: String, password: String) {
+    db.withSession {
+      implicit session =>
+        val filteredUsers = users.filter(x => x.username === username).list
+
+        if(filteredUsers.length < 1) {
+          redirect("/")
+        } else {
+          val correctUser = filteredUsers(0)
+          if(password != correctUser.password) {
+            redirect("/")
+          }
+        }
+        
+    }
+  }
 
   get("/") {
     (session.get("username"), session.get("password")) match {
@@ -24,16 +44,19 @@ class ScalatraTaskManagerServlet extends ScalatraTaskManagerWebAppStack with Fla
                 <td><input type='password' name='password'/></td>
               </tr>
               <tr>
-                <td colspan='2' id='centered'><input type='submit'/></td>
+                <td colspan='2' id='centered'><button type="submit">ENTER</button></td>
               </tr>
             </table>
           </form>
         }
-        set("Scalatra Task Manager Login", contents, "noclass")
+        set(contents, "noclass")
     }
   }
 
   post("/tasks") {
+    // check username
+    checkUsername(params("username"), params("password"))
+
     (session.get("username"), session.get("password")) match {
       case (None, None) =>
         session("username") = params("username")
@@ -43,7 +66,7 @@ class ScalatraTaskManagerServlet extends ScalatraTaskManagerWebAppStack with Fla
           <h2>{ session("username") }</h2>
           <h2>{ session("password") }</h2>
         }
-        set("Scalatra Task Manager", contents, "none")
+        set(contents, "none")
       case _ =>
         redirect("/tasks")
     }
@@ -59,7 +82,7 @@ class ScalatraTaskManagerServlet extends ScalatraTaskManagerWebAppStack with Fla
           <h2>{ session("username") }</h2>
           <h2>{ session("password") }</h2>
         }
-        set("Scalatra Task Manager", contents, "none")
+        set(contents, "none")
     }
   }
 

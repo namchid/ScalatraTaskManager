@@ -6,10 +6,18 @@ import scala.xml.{ Text, Node }
 
 object Page {
 
-  def set(title: String, contents: Seq[Node], containerClassName: String = "outerContainer") = {
+  val loginHeader = {
+    <title>"Scalatra Task Manager Login"</title>
+    <link rel="stylesheet" type="text/css" href="css/tasks.css"/>
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Raleway:600,300"/>
+    <link rel="stylesheet" type="text/css" href="css/loginStyles.css"/>
+    <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+  }
+
+  def set(contents: Seq[Node], containerClassName: String = "outerContainer") = {
     <html>
       <head lang="en">
-        <title>{ title }</title>
+        { loginHeader }
       </head>
       <body>
         <div id="navContainer">
