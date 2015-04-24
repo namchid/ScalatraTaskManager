@@ -50,12 +50,17 @@ class ScalatraTaskManagerServlet extends ScalatraTaskManagerWebAppStack with Fla
   }
 
   get("/tasks") {
-    val contents = {
-      <h1>You already logged in.</h1>
-      <h2>{ session("username") }</h2>
-      <h2>{ session("password") }</h2>
+    (session.get("username"), session.get("password")) match {
+      case (None, None) =>
+        redirect("/")
+      case _ =>
+        val contents = {
+          <h1>You already logged in.</h1>
+          <h2>{ session("username") }</h2>
+          <h2>{ session("password") }</h2>
+        }
+        set("Scalatra Task Manager", contents, "none")
     }
-    set("Scalatra Task Manager", contents, "none")
   }
 
   get("/logout") {
