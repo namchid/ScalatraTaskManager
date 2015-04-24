@@ -10,7 +10,7 @@ class ScalatraTaskManagerServlet extends ScalatraTaskManagerWebAppStack with Fla
   get("/") {
     (session.get("username"), session.get("password")) match {
       case (Some(_), Some(_)) =>
-//        redirect("/tasks")
+        redirect("/tasks")
       case _ =>
         val contents = {
           <form action={ url("/tasks") } method='POST'>
