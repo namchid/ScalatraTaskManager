@@ -9,4 +9,6 @@ $ ./sbt
 > browse
 ```
 
-If `browse` doesn't launch your browser, manually open [http://localhost:8080/](http://localhost:8080/) in your browser.
+If `browse` doesn't launch your browser, manually open [http://localhost:8096/](http://localhost:8096/) in your browser.
+
+Deployed to [Heroku](https://fathomless-bastion-1676.herokuapp.com/)
