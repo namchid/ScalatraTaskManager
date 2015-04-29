@@ -53,8 +53,6 @@ class ScalatraTaskManagerServlet(db: Database) extends ScalatraTaskManagerWebApp
   }
 
   get("/tasks") {
-    println("session variables\n" + session.toList)
-
     session.get("user_id") match {
       case (None) =>
         redirect("/")
@@ -66,9 +64,6 @@ class ScalatraTaskManagerServlet(db: Database) extends ScalatraTaskManagerWebApp
 
   //todo you are here
   post("/addDelete") {
-    println(params)
-    
-    
     (params.get("delete"), params.get("add")) match {
       case (None, Some(_)) =>
         val userId = session("user_id").asInstanceOf[Int]
@@ -83,8 +78,6 @@ class ScalatraTaskManagerServlet(db: Database) extends ScalatraTaskManagerWebApp
   }
 
   post("/createNewUser") {
-    println(params)
-
     val username = params.get("username")
     val password = params.get("password")
     val password2 = params.get("password2")
@@ -100,7 +93,6 @@ class ScalatraTaskManagerServlet(db: Database) extends ScalatraTaskManagerWebApp
   }
 
   get("/newUserConfirmationPage") {
-    println("todo starting here")
     setConfirmation()
   }
 

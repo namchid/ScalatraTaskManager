@@ -111,7 +111,6 @@ object Page {
       implicit session =>
         users.map(u => (u.username, u.password)).insert(username, password)
     }
-    println("got here")
   }
 
   def setNewUserForm() = {
