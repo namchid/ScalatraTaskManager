@@ -12,7 +12,7 @@ import scala.slick.jdbc.StaticQuery.interpolation
 import Tables._
 
 object Page {
-  
+
   //todo: add multiple users, deleteTask, addTask
 
   val loginHeader = {
@@ -27,7 +27,7 @@ object Page {
     <title>Scalatra Task Manager</title>
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Raleway:600,300"/>
     <link rel="stylesheet" type="text/css" href="css/tasks.css"/>
-    <link rel="stylesheet" type="text/css" href="styles/myTasksStyles.css"/>
+    <link rel="stylesheet" type="text/css" href="css/myTasksStyles.css"/>
     <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
   }
 
@@ -50,7 +50,7 @@ object Page {
   }
 
   def deleteTask(taskId: Int, userId: Int) {
-    
+
   }
 
   def addTask(taskId: Int, userId: Int) {
@@ -86,7 +86,11 @@ object Page {
         <div id="navContainer">
         </div>
         <div class="outerContainer">
-          <h1>Hello, { username }</h1>
+          <div class="headContainer">
+            <h1>Hello, { username }</h1>
+          </div>
+          <a href="/"><button type="button">Logout</button></a>
+          <hr/>
           <form action="/addDelete" method="post">
             <table>
               { retTasks }

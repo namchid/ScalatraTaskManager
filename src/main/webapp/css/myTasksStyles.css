@@ -1,0 +1,41 @@
+* {
+    font-family: 'Raleway', sans-serif;
+}
+
+
+table, tr, td, th {
+//    border: 1px solid black;
+//    border-collapse: collapse;
+}
+
+button {
+    font-family: 'Raleway', sans-serif;
+    width: 100%;
+    font-size: 1vw;
+}
+
+.addDeleteCol {
+    width: 30%;
+}
+
+.butt {
+    background: #000;
+    width: 3vw;
+}
+
+.addButt {
+    background: #954489;
+    width: 3vw;
+}
+
+.trans {
+    //background: #000;
+    width: 3vw;
+    color: #000;
+    color: rgba(0, 0, 0, 0);
+}
+
+//added
+#tasksTable {
+    width: 50vw;
+}

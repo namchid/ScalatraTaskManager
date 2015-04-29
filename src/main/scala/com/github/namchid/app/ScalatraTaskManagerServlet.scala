@@ -26,7 +26,6 @@ class ScalatraTaskManagerServlet(db: Database) extends ScalatraTaskManagerWebApp
           }
         }
     }
-    -1
   }
 
   get("/") {
