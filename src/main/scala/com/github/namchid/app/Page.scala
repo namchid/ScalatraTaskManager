@@ -31,6 +31,24 @@ object Page {
     <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
   }
 
+  val loginContents = {
+    <form action="/tasks" method='POST'>
+      <table>
+        <tr>
+          <td class='right'>username</td>
+          <td><input type='text' name='username'/></td>
+        </tr>
+        <tr>
+          <td class='right'>password</td>
+          <td><input type='password' name='password'/></td>
+        </tr>
+        <tr>
+          <td colspan='2' id='centered'><button type="submit">ENTER</button></td>
+        </tr>
+      </table>
+    </form>
+  }
+
   def getTasks(db: Database, userId: Int): Seq[Node] = {
     db.withSession {
       implicit session =>
@@ -57,7 +75,7 @@ object Page {
 
   }
 
-  def set(contents: Seq[Node]) = {
+  def set() = {
     <html>
       <head lang="en">
         { loginHeader }
@@ -66,7 +84,7 @@ object Page {
         <div id="navContainer">
         </div>
         <div class="">
-          { contents }
+          { loginContents }
         </div>
       </body>
     </html>
@@ -89,7 +107,7 @@ object Page {
           <div class="headContainer">
             <h1>Hello, { username }</h1>
           </div>
-          <a href="/"><button type="button">Logout</button></a>
+          <a href="/logout"><button type="button">Logout</button></a>
           <hr/>
           <form action="/addDelete" method="post">
             <table>

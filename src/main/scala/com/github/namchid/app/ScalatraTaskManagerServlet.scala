@@ -5,7 +5,7 @@ import scala.xml.{ Text, Node }
 import scalate.ScalateSupport
 import scala.slick.driver.MySQLDriver.simple._
 
-import Page.set
+import Page._
 import Tables._
 
 class ScalatraTaskManagerServlet(db: Database) extends ScalatraTaskManagerWebAppStack with FlashMapSupport with ScalateSupport {
@@ -31,25 +31,7 @@ class ScalatraTaskManagerServlet(db: Database) extends ScalatraTaskManagerWebApp
   get("/") {
     session.get("user_id") match {
       case None =>
-        val contents = {
-          <form action="/tasks" method='POST'>
-            <table>
-              <tr>
-                <td class='right'>username</td>
-                <td><input type='text' name='username'/></td>
-              </tr>
-              <tr>
-                <td class='right'>password</td>
-                <td><input type='password' name='password'/></td>
-              </tr>
-              <tr>
-                <td colspan='2' id='centered'><button type="submit">ENTER</button></td>
-              </tr>
-            </table>
-          </form>
-        }
-        //set(contents, "noclass", db)
-        set(contents)
+        Page.set()
       case _ =>
         redirect("/tasks")
     }
