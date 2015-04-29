@@ -37,6 +37,10 @@ class ScalatraTaskManagerServlet(db: Database) extends ScalatraTaskManagerWebApp
     }
   }
 
+  get("/newUser") {
+    setNewUserForm()
+  }
+
   post("/tasks") {
     (params.get("username"), params.get("password")) match {
       case (None, None) =>
@@ -49,6 +53,8 @@ class ScalatraTaskManagerServlet(db: Database) extends ScalatraTaskManagerWebApp
   }
 
   get("/tasks") {
+    println("session variables\n" + session.toList)
+
     session.get("user_id") match {
       case (None) =>
         redirect("/")
@@ -60,16 +66,42 @@ class ScalatraTaskManagerServlet(db: Database) extends ScalatraTaskManagerWebApp
 
   //todo you are here
   post("/addDelete") {
-    <html>
-      <body>
-        Ok you got here
-        {
-          println("params:")
-          println(params)
-          println(params("newTask"))
-        }
-      </body>
-    </html>
+    println(params)
+    
+    
+    (params.get("delete"), params.get("add")) match {
+      case (None, Some(_)) =>
+        val userId = session("user_id").asInstanceOf[Int]
+        if (params("newTask") == "")
+          redirect("/tasks")
+        addTask(db, { params("newTask") }, userId)
+      case (Some(_), None) =>
+        deleteTask(db, { params("delete").toInt })
+      case _ =>
+    }
+    redirect("/tasks")
+  }
+
+  post("/createNewUser") {
+    println(params)
+
+    val username = params.get("username")
+    val password = params.get("password")
+    val password2 = params.get("password2")
+
+    if (username == Some("") || password == Some("") || password2 == Some(""))
+      redirect("/newUser")
+    else {
+      if (password != password2)
+        redirect("/newUser")
+      createNewUser(db, { params("username").toString() }, { params("password").toString() })
+      redirect("/newUserConfirmationPage")
+    }
+  }
+
+  get("/newUserConfirmationPage") {
+    println("todo starting here")
+    setConfirmation()
   }
 
   get("/logout") {

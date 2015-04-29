@@ -15,6 +15,7 @@
 
 #centered {
     text-align: center;
+    color: green;
 }
 
 #enterButton {
@@ -25,3 +26,10 @@
     color: #000;
     color: rgba(0, 0, 0, 0);
 }
+
+a {
+	color: blue;
+}
+
+a:visited {
+	color: blue;

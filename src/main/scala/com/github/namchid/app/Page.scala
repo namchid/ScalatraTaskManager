@@ -45,6 +45,31 @@ object Page {
         <tr>
           <td colspan='2' id='centered'><button type="submit">ENTER</button></td>
         </tr>
+        <tr>
+          <td colspan='2' id="centered"><a href="/newUser">Create New Account</a></td>
+        </tr>
+      </table>
+    </form>
+  }
+
+  val newUserForm = {
+    <form action="/createNewUser" method="POST">
+      <table>
+        <tr>
+          <td class="right">Enter Username:</td>
+          <td><input type='text' name='username'/></td>
+        </tr>
+        <tr>
+          <td class='right'>Enter password:</td>
+          <td><input type='password' name='password'/></td>
+        </tr>
+        <tr>
+          <td class='right'>Re-enter password:</td>
+          <td><input type='password' name='password2'/></td>
+        </tr>
+        <tr>
+          <td colspan='2' id='centered'><button type="submit">Submit</button></td>
+        </tr>
       </table>
     </form>
   }
@@ -52,7 +77,7 @@ object Page {
   def getTasks(db: Database, userId: Int): Seq[Node] = {
     db.withSession {
       implicit session =>
-        val usersTasks = tasks.filter(i => i.userId === 1).list
+        val usersTasks = tasks.filter(i => i.userId === userId).list
 
         val retTasks = usersTasks.map(x =>
           <tr>
@@ -67,12 +92,57 @@ object Page {
     }
   }
 
-  def deleteTask(taskId: Int, userId: Int) {
-
+  def deleteTask(db: Database, taskId: Int) {
+    db.withSession {
+      implicit session =>
+        tasks.filter(t => t.taskId === taskId).delete
+    }
   }
 
-  def addTask(taskId: Int, userId: Int) {
+  def addTask(db: Database, taskDescription: String, userId: Int) {
+    db.withSession {
+      implicit session =>
+        tasks.map(t => (t.userId, t.description)).insert(userId, taskDescription)
+    }
+  }
 
+  def createNewUser(db: Database, username: String, password: String) {
+    db.withSession {
+      implicit session =>
+        users.map(u => (u.username, u.password)).insert(username, password)
+    }
+    println("got here")
+  }
+
+  def setNewUserForm() = {
+    <html>
+      <head lang="en">
+        { loginHeader }
+      </head>
+      <body>
+        <div id="navContainer">
+        </div>
+        <div class="">
+          { newUserForm }
+        </div>
+      </body>
+    </html>
+  }
+
+  def setConfirmation() = {
+    <html>
+      <head lang="en">
+        { tasksHeader }
+      </head>
+      <body>
+        <div id="navContainer">
+        </div>
+        <div class="outerContainer">
+          <h1>New Account Created.</h1>
+          <h2><a href="/">Click here to return to Login</a></h2>
+        </div>
+      </body>
+    </html>
   }
 
   def set() = {
