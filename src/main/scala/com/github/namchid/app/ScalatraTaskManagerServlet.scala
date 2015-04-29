@@ -10,30 +10,30 @@ import Tables._
 
 class ScalatraTaskManagerServlet(db: Database) extends ScalatraTaskManagerWebAppStack with FlashMapSupport with ScalateSupport {
 
-  def checkUsername(username: String, password: String) {
+  def checkUsername(username: String, password: String): Int = {
     db.withSession {
       implicit session =>
         val filteredUsers = users.filter(x => x.username === username).list
 
-        if(filteredUsers.length < 1) {
+        if (filteredUsers.length < 1) {
           redirect("/")
         } else {
           val correctUser = filteredUsers(0)
-          if(password != correctUser.password) {
+          if (password != correctUser.password) {
             redirect("/")
+          } else {
+            return correctUser.userId
           }
         }
-        
     }
+    -1
   }
 
   get("/") {
-    (session.get("username"), session.get("password")) match {
-      case (Some(_), Some(_)) =>
-        redirect("/tasks")
-      case _ =>
+    session.get("user_id") match {
+      case None =>
         val contents = {
-          <form action={ url("/tasks") } method='POST'>
+          <form action="/tasks" method='POST'>
             <table>
               <tr>
                 <td class='right'>username</td>
@@ -49,41 +49,46 @@ class ScalatraTaskManagerServlet(db: Database) extends ScalatraTaskManagerWebApp
             </table>
           </form>
         }
-        set(contents, "noclass")
-    }
-  }
-
-  post("/tasks") {
-    // check username
-    checkUsername(params("username"), params("password"))
-
-    (session.get("username"), session.get("password")) match {
-      case (None, None) =>
-        session("username") = params("username")
-        session("password") = params("password") //ok, clearly I shouldn't be storing this. get index later instead
-        val contents = {
-          <h1>You posted:</h1>
-          <h2>{ session("username") }</h2>
-          <h2>{ session("password") }</h2>
-        }
-        set(contents, "none")
+        //set(contents, "noclass", db)
+        set(contents)
       case _ =>
         redirect("/tasks")
     }
   }
 
-  get("/tasks") {
-    (session.get("username"), session.get("password")) match {
+  post("/tasks") {
+    (params.get("username"), params.get("password")) match {
       case (None, None) =>
         redirect("/")
       case _ =>
-        val contents = {
-          <h1>You already logged in.</h1>
-          <h2>{ session("username") }</h2>
-          <h2>{ session("password") }</h2>
-        }
-        set(contents, "none")
+        session("user_id") = checkUsername(params("username"), params("password"))
+        session("username") = params("username")
+        redirect("/tasks")
     }
+  }
+
+  get("/tasks") {
+    session.get("user_id") match {
+      case (None) =>
+        redirect("/")
+      case _ =>
+        val userId = session("user_id").asInstanceOf[Int]
+        set(db, userId, { session("username").toString() })
+    }
+  }
+
+  //todo you are here
+  post("/addDelete") {
+    <html>
+      <body>
+        Ok you got here
+        {
+          println("params:")
+          println(params)
+          println(params("newTask"))
+        }
+      </body>
+    </html>
   }
 
   get("/logout") {
