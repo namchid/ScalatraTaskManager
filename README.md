@@ -9,6 +9,5 @@ $ ./sbt
 > browse
 ```
 
-If `browse` doesn't launch your browser, manually open [http://localhost:8096/](http://localhost:8096/) in your browser.
+If `browse` doesn't launch your browser, manually open [http://localhost:8107/](http://localhost:8107/) in your browser. To connect to database, you must be on Dias11.
 
-Deployed to [Heroku](https://fathomless-bastion-1676.herokuapp.com/)

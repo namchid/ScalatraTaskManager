@@ -19,7 +19,7 @@ object ScalatraTaskManagerWebAppBuild extends Build {
     "scalatra-task-manager-web-app",
     file("."),
     settings = ScalatraPlugin.scalatraWithJRebel ++ scalateSettings ++ Seq(
-      port in container.Configuration := 9096,
+      port in container.Configuration := 8107,
       organization := Organization,
       name := Name,
       version := Version,

@@ -5,7 +5,7 @@ import org.scalatra.servlet.ScalatraListener
 
 object JettyLauncher {
   def main(args: Array[String]) {
-    val port = 9096
+    val port = 8107
 
     val server = new Server(port)
     val context = new WebAppContext()
